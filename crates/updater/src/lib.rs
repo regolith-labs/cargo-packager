@@ -156,7 +156,7 @@ use std::{
 use time::OffsetDateTime;
 use url::Url;
 
-mod custom_serialization;
+pub mod custom_serialization;
 mod error;
 
 pub use crate::error::*;
