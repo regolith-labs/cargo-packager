@@ -154,8 +154,9 @@ use std::{
 use time::OffsetDateTime;
 use url::Url;
 
-pub mod custom_serialization;
+pub mod deserialize;
 mod error;
+pub mod serialize;
 
 pub use crate::error::*;
 pub use http;
