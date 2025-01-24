@@ -134,8 +134,6 @@
 //! - [`"BasicUi"`](WindowsUpdateInstallMode::BasicUi): There will be a basic user interface shown which requires user interaction to finish the installation.
 //! - [`"Quiet"`](WindowsUpdateInstallMode::Quiet): There will be no progress feedback to the user. With this mode the installer cannot request admin privileges by itself so it only works in user-wide installations or when your app itself already runs with admin privileges. Generally not recommended.
 
-#![deny(missing_docs)]
-
 use base64::Engine;
 use cargo_packager_utils::current_exe::current_exe;
 use http::HeaderName;
