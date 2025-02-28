@@ -725,14 +725,14 @@ impl Update {
     }
 
     /// Installs the updater package downloaded by [`Update::download`]
-    pub fn install(&self, bytes: Vec<u8>) -> Result<()> {
+    pub fn install(&self, bytes: &[u8]) -> Result<()> {
         self.install_inner(bytes)
     }
 
     /// Downloads and installs the updater package
     pub fn download_and_install(&self) -> Result<()> {
         let bytes = self.download()?;
-        self.install(bytes)
+        self.install(bytes.as_slice())
     }
 
     /// Downloads and installs the updater package
@@ -745,7 +745,7 @@ impl Update {
         on_download_finish: D,
     ) -> Result<()> {
         let bytes = self.download_extended(on_chunk, on_download_finish)?;
-        self.install(bytes)
+        self.install(bytes.as_slice())
     }
 
     // Windows
@@ -755,7 +755,7 @@ impl Update {
     // │── [AppName]_[version]_x64-setup.exe           # NSIS installer
     // └── ...
     #[cfg(windows)]
-    fn install_inner(&self, bytes: Vec<u8>) -> Result<()> {
+    fn install_inner(&self, bytes: &[u8]) -> Result<()> {
         use std::{io::Write, os::windows::process::CommandExt, process::Command};
 
         let extension = match self.format {
@@ -765,7 +765,7 @@ impl Update {
         };
 
         let mut temp_file = tempfile::Builder::new().suffix(extension).tempfile()?;
-        temp_file.write_all(&bytes)?;
+        temp_file.write_all(bytes)?;
         let (f, path) = temp_file.keep()?;
         drop(f);
 
@@ -911,7 +911,7 @@ impl Update {
         target_os = "netbsd",
         target_os = "openbsd"
     ))]
-    fn install_inner(&self, bytes: Vec<u8>) -> Result<()> {
+    fn install_inner(&self, bytes: &[u8]) -> Result<()> {
         use std::fs;
 
         match self.format {
@@ -974,7 +974,7 @@ impl Update {
     // │          └── ...
     // └── ...
     #[cfg(target_os = "macos")]
-    fn install_inner(&self, bytes: Vec<u8>) -> Result<()> {
+    fn install_inner(&self, bytes: &[u8]) -> Result<()> {
         use flate2::read::GzDecoder;
         use std::fs;
 
